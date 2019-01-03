@@ -7,7 +7,7 @@ import android.arch.persistence.room.*
 interface EntryDao {
 
     @Query("SELECT * FROM entries")
-    fun getEntries(): LiveData<List<Entry>>
+    fun getAllEntries(): LiveData<List<Entry>>
 
     @Insert
     fun insertEntry(entry: Entry)

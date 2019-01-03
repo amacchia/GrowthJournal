@@ -3,16 +3,18 @@ package com.example.android.personalgrowthjournal.Database
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 
-@Database(entities = arrayOf(Entry::class), version = 1, exportSchema = false)
+@Database(entities = [Entry::class], version = 1, exportSchema = false)
+@TypeConverters(DateConverter::class )
 abstract class EntriesDatabase : RoomDatabase() {
     abstract fun entryDao(): EntryDao
 
     // Kt classes cannot have static methods, so use companion object for singleton
     companion object {
 
-        val DATABASE_NAME = "journal-db"
+        private const val DATABASE_NAME = "journal-db"
 
         // For Singleton instantiation
         @Volatile

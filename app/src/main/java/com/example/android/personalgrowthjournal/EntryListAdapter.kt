@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.android.personalgrowthjournal.Database.Entry
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
 
@@ -23,7 +25,9 @@ class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>()
     }
 
     override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
-        holder.textView.text = entryDataset[position].gratitudeEntry
+        val dateString = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(entryDataset[position].entryDate)
+
+        holder.textView.text = dateString
     }
 
     fun setData(newData: List<Entry>) {

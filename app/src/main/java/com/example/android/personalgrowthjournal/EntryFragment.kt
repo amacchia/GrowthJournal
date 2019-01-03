@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.EditText
 import com.example.android.personalgrowthjournal.Database.EntriesDatabase
 import com.example.android.personalgrowthjournal.Database.Entry
+import java.util.*
 
 class EntryFragment : Fragment() {
 
@@ -50,12 +51,17 @@ class EntryFragment : Fragment() {
                     mSuccessfulEditText.text.toString(),
                     mWellEditText.text.toString(),
                     mBetterEditText.text.toString(),
-                    mVentEditText.text.toString())
+                    mVentEditText.text.toString(),
+                    Date()
+                )
 
                 class UpdateDbTask :AsyncTask<Void, Void, Boolean>() {
 
                     override fun onPostExecute(result: Boolean?) {
                         super.onPostExecute(result)
+
+                        //Return to entry list fragment
+                        finishFragment()
                     }
 
                     override fun doInBackground(vararg p0: Void?): Boolean {
@@ -71,6 +77,15 @@ class EntryFragment : Fragment() {
         }
 
         return true
+    }
+
+
+    private fun finishFragment() {
+        // Use this instead of pop backstack because it will return to previous state without updated data
+        // At least I think that's how it works
+        fragmentManager?.beginTransaction()
+            ?.replace(R.id.fragment_container, EntriesListFragment())
+            ?.commit()
     }
 
 }

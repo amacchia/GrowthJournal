@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -27,12 +28,14 @@ class EntriesListFragment : Fragment() {
         viewAdapter = EntryListAdapter()
 
 
-        viewModel.entries.observe(this, Observer {
+        viewModel.getEntries().observe(this, Observer {
             if (it != null) {
                 (viewAdapter as EntryListAdapter).setData(it)
             }
         })
     }
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
             : View? {
@@ -45,9 +48,8 @@ class EntriesListFragment : Fragment() {
         fab.setOnClickListener {
             val fragmentManager = fragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
-            val fragment = EntryFragment()
-            fragmentTransaction?.add(R.id.fragment_container, fragment)
-            fragmentTransaction?.addToBackStack(null)
+            fragmentTransaction?.add(R.id.fragment_container, EntryFragment())
+            fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
             fragmentTransaction?.hide(this)
             fragmentTransaction?.commit()
         }
@@ -57,6 +59,8 @@ class EntriesListFragment : Fragment() {
             adapter = viewAdapter
         }
 
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        recyclerView.addItemDecoration(divider)
 
         return view
     }
