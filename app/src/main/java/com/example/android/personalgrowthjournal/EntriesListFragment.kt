@@ -25,6 +25,9 @@ class EntriesListFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this).get(EntryViewModel::class.java)
 
         viewManager = LinearLayoutManager(context)
+        (viewManager as LinearLayoutManager).reverseLayout = true
+        (viewManager as LinearLayoutManager).stackFromEnd = true
+
         viewAdapter = EntryListAdapter()
 
 
