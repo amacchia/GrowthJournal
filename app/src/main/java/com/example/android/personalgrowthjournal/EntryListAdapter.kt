@@ -1,7 +1,9 @@
 package com.example.android.personalgrowthjournal
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.android.personalgrowthjournal.Database.Entry
@@ -27,6 +29,8 @@ class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>()
     override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
         val dateString = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(entryDataset[position].entryDate)
 
+        Log.i("onBindViewHolder", "ID: $entryDataset[position].id ")
+
         holder.textView.text = dateString
     }
 
@@ -36,6 +40,19 @@ class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>()
     }
 
 
-    class EntryViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+    inner class EntryViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView), View.OnClickListener {
+
+        init {
+            textView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View?) {
+
+            val selectedEntry = entryDataset[adapterPosition]
+            Log.i("EntryViewHolder", "$selectedEntry")
+
+        }
+
+    }
 
 }
