@@ -1,5 +1,7 @@
 package com.example.android.personalgrowthjournal
 
+import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +12,7 @@ import com.example.android.personalgrowthjournal.Database.Entry
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
+class EntryListAdapter(val fragmentManager: FragmentManager?) : RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
 
     private var entryDataset = emptyList<Entry>()
 
@@ -28,9 +30,6 @@ class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>()
 
     override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
         val dateString = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(entryDataset[position].entryDate)
-
-        Log.i("onBindViewHolder", "ID: $entryDataset[position].id ")
-
         holder.textView.text = dateString
     }
 
@@ -48,8 +47,20 @@ class EntryListAdapter: RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>()
 
         override fun onClick(view: View?) {
 
-            val selectedEntry = entryDataset[adapterPosition]
-            Log.i("EntryViewHolder", "$selectedEntry")
+            val selectedEntryId = entryDataset[adapterPosition].id
+            Log.i("EntryViewHolder", "$selectedEntryId")
+
+            val fragment = EntryFragment()
+            val args = Bundle()
+            if (selectedEntryId != null) {
+                args.putInt("entryId", selectedEntryId)
+            }
+            fragment.arguments = args
+
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.fragment_container, fragment)
+            fragmentTransaction?.addToBackStack(null)
+            fragmentTransaction?.commit()
 
         }
 

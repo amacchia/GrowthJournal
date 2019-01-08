@@ -28,8 +28,7 @@ class EntriesListFragment : Fragment() {
         (viewManager as LinearLayoutManager).reverseLayout = true
         (viewManager as LinearLayoutManager).stackFromEnd = true
 
-        viewAdapter = EntryListAdapter()
-
+        viewAdapter = EntryListAdapter(fragmentManager)
 
         viewModel.getEntries().observe(this, Observer {
             if (it != null) {
@@ -37,9 +36,7 @@ class EntriesListFragment : Fragment() {
             }
         })
     }
-
-
-
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
             : View? {
         Log.i(TAG, "onCreateView()")
@@ -51,9 +48,8 @@ class EntriesListFragment : Fragment() {
         fab.setOnClickListener {
             val fragmentManager = fragmentManager
             val fragmentTransaction = fragmentManager?.beginTransaction()
-            fragmentTransaction?.add(R.id.fragment_container, EntryFragment())
+            fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
             fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
-            fragmentTransaction?.hide(this)
             fragmentTransaction?.commit()
         }
 

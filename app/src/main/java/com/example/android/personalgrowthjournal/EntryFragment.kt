@@ -1,28 +1,44 @@
 package com.example.android.personalgrowthjournal
 
-import android.os.AsyncTask
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.*
 import android.widget.EditText
-import com.example.android.personalgrowthjournal.Database.EntriesDatabase
 import com.example.android.personalgrowthjournal.Database.Entry
 import java.util.*
 
 class EntryFragment : Fragment() {
 
-    lateinit var mDb: EntriesDatabase
-    lateinit var mGratitudeEditText: EditText
-    lateinit var mSuccessfulEditText: EditText
-    lateinit var mWellEditText: EditText
-    lateinit var mBetterEditText: EditText
-    lateinit var mVentEditText: EditText
+    private lateinit var mGratitudeEditText: EditText
+    private lateinit var mSuccessfulEditText: EditText
+    private lateinit var mWellEditText: EditText
+    private lateinit var mBetterEditText: EditText
+    private lateinit var mVentEditText: EditText
+    private lateinit var mViewModel: EntryDetailViewModel
+
+    private lateinit var mEntry: Entry // Will be initialized if an Entry is being updated
+
+    var mNewEntry = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        mDb = EntriesDatabase.getInstance(context)
+        mViewModel = ViewModelProviders.of(this).get(EntryDetailViewModel::class.java)
+
+        mNewEntry = arguments == null
+        if (!mNewEntry) {
+            // Load the entry from the database
+            val selectedEntryId = arguments?.getInt("entryId")
+            val entryLiveData = selectedEntryId?.let { mViewModel.getEntryById(it) }
+
+            entryLiveData?.observe(this, android.arch.lifecycle.Observer {
+                Log.i("EntryFragment", "${it!!}")
+                mEntry = it
+            })
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,37 +58,9 @@ class EntryFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
         when (item?.itemId) {
             R.id.save_entry_menu_item -> {
-
-                val entry = Entry(
-                    mGratitudeEditText.text.toString(),
-                    mSuccessfulEditText.text.toString(),
-                    mWellEditText.text.toString(),
-                    mBetterEditText.text.toString(),
-                    mVentEditText.text.toString(),
-                    Date()
-                )
-
-                class UpdateDbTask :AsyncTask<Void, Void, Boolean>() {
-
-                    override fun onPostExecute(result: Boolean?) {
-                        super.onPostExecute(result)
-
-                        //Return to entry list fragment
-                        finishFragment()
-                    }
-
-                    override fun doInBackground(vararg p0: Void?): Boolean {
-                        // Insert or Update db
-                        mDb.entryDao().insertEntry(entry)
-
-                        return true // If op was successful
-                    }
-                }
-
-                UpdateDbTask().execute()
+                finishFragment()
             }
         }
 
@@ -81,6 +69,27 @@ class EntryFragment : Fragment() {
 
 
     private fun finishFragment() {
+
+        if (mNewEntry) {
+            mEntry = Entry(
+                mGratitudeEditText.text.toString(),
+                mSuccessfulEditText.text.toString(),
+                mWellEditText.text.toString(),
+                mBetterEditText.text.toString(),
+                mVentEditText.text.toString(),
+                Date()
+            )
+
+            mViewModel.insertEntry(mEntry)
+        } else {
+            mEntry.gratitudeEntry = mGratitudeEditText.text.toString()
+            mEntry.successEntry = mSuccessfulEditText.text.toString()
+            mEntry.wellEntry = mWellEditText.text.toString()
+            mEntry.betterEntry = mBetterEditText.text.toString()
+            mEntry.ventEntry = mVentEditText.text.toString()
+            mViewModel.updateEntry(mEntry)
+        }
+
         // Use this instead of pop backstack because it will return to previous state without updated data
         // At least I think that's how it works
         fragmentManager?.beginTransaction()

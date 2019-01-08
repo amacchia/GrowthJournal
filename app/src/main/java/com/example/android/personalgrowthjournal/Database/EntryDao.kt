@@ -10,7 +10,7 @@ interface EntryDao {
     fun getAllEntries(): LiveData<List<Entry>>
 
     @Query("SELECT * FROM entries WHERE id = :id LIMIT 1")
-    fun getEntryById(id: Int) : Entry
+    fun getEntryById(id: Int) : LiveData<Entry>
 
     @Insert
     fun insertEntry(entry: Entry)
