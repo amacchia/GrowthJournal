@@ -22,14 +22,18 @@ class EntriesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(EntryViewModel::class.java)
 
         viewManager = LinearLayoutManager(context)
         (viewManager as LinearLayoutManager).reverseLayout = true
         (viewManager as LinearLayoutManager).stackFromEnd = true
 
         viewAdapter = EntryListAdapter(fragmentManager)
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val viewModel = ViewModelProviders.of(this).get(EntryViewModel::class.java)
         viewModel.getEntries().observe(this, Observer {
             if (it != null) {
                 (viewAdapter as EntryListAdapter).setData(it)
@@ -42,7 +46,6 @@ class EntriesListFragment : Fragment() {
         Log.i(TAG, "onCreateView()")
 
         val view = inflater.inflate(R.layout.entries_list, container, false)
-
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
 
         fab.setOnClickListener {

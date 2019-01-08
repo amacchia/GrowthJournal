@@ -46,7 +46,6 @@ class EntryListAdapter(val fragmentManager: FragmentManager?) : RecyclerView.Ada
         }
 
         override fun onClick(view: View?) {
-
             val selectedEntryId = entryDataset[adapterPosition].id
             Log.i("EntryViewHolder", "$selectedEntryId")
 

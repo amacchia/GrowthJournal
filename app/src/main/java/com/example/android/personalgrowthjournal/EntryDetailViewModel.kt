@@ -40,7 +40,6 @@ class EntryDetailViewModel(app: Application): AndroidViewModel(app) {
 
             entry[0]?.let { mDb.entryDao().updateEntry(it) }
 
-
             return null
         }
     }
