@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PersonalGrowthJournal</string>
+    <string name="delete_entry_message">Are you sure you want to delete this entry?</string>
+    <string name="delete_entry_title">Delete Entry</string>
 </resources>

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.android.personalgrowthjournal.Database.Entry
 
 class EntriesListFragment : Fragment() {
 
@@ -19,6 +21,7 @@ class EntriesListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewModel: EntryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +30,13 @@ class EntriesListFragment : Fragment() {
         (viewManager as LinearLayoutManager).reverseLayout = true
         (viewManager as LinearLayoutManager).stackFromEnd = true
 
-        viewAdapter = EntryListAdapter(fragmentManager)
+        viewAdapter = EntryListAdapter(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this).get(EntryViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(EntryViewModel::class.java)
         viewModel.getEntries().observe(this, Observer {
             if (it != null) {
                 (viewAdapter as EntryListAdapter).setData(it)
@@ -65,5 +68,27 @@ class EntriesListFragment : Fragment() {
         recyclerView.addItemDecoration(divider)
 
         return view
+    }
+
+    fun deleteEntry(entry: Entry) {
+        // Build AlertDialog
+        val builder: AlertDialog.Builder? = activity?.let {
+            AlertDialog.Builder(it)
+        }
+
+        builder?.apply {
+            setPositiveButton("OK") { _, _ ->
+                viewModel.deleteEntry(entry)
+            }
+
+            setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+
+        builder?.setMessage(getString(R.string.delete_entry_message))
+            ?.setTitle(getString(R.string.delete_entry_title))
+
+        builder?.create()?.show()
     }
 }

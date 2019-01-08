@@ -1,7 +1,6 @@
 package com.example.android.personalgrowthjournal
 
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +11,7 @@ import com.example.android.personalgrowthjournal.Database.Entry
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EntryListAdapter(val fragmentManager: FragmentManager?) : RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
+class EntryListAdapter(val fragment: EntriesListFragment) : RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
 
     private var entryDataset = emptyList<Entry>()
 
@@ -39,10 +38,12 @@ class EntryListAdapter(val fragmentManager: FragmentManager?) : RecyclerView.Ada
     }
 
 
-    inner class EntryViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView), View.OnClickListener {
+    inner class EntryViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView),
+        View.OnClickListener, View.OnLongClickListener {
 
         init {
             textView.setOnClickListener(this)
+            textView.setOnLongClickListener(this)
         }
 
         override fun onClick(view: View?) {
@@ -56,11 +57,15 @@ class EntryListAdapter(val fragmentManager: FragmentManager?) : RecyclerView.Ada
             }
             fragment.arguments = args
 
-            val fragmentTransaction = fragmentManager?.beginTransaction()
+            val fragmentTransaction = fragment.fragmentManager?.beginTransaction()
             fragmentTransaction?.replace(R.id.fragment_container, fragment)
             fragmentTransaction?.addToBackStack(null)
             fragmentTransaction?.commit()
+        }
 
+        override fun onLongClick(view: View?): Boolean {
+            fragment.deleteEntry(entryDataset[adapterPosition])
+            return true
         }
 
     }

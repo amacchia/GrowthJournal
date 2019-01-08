@@ -16,32 +16,22 @@ class EntryDetailViewModel(app: Application): AndroidViewModel(app) {
     }
 
     fun insertEntry(entry: Entry) {
-        InsertTask().execute(entry)
+
+        object : AsyncTask<Void, Void, Void>() {
+            override fun doInBackground(vararg p0: Void?): Void? {
+                mDb.entryDao().insertEntry(entry)
+                return null
+            }
+        }.execute()
+
     }
 
     fun updateEntry(entry: Entry) {
-        UpdateTask().execute(entry)
+        object : AsyncTask<Void, Void, Void>() {
+            override fun doInBackground(vararg p0: Void?): Void? {
+                mDb.entryDao().updateEntry(entry)
+                return null
+            }
+        }.execute()
     }
-
-    private inner class InsertTask: AsyncTask<Entry, Void, Void>() {
-        override fun doInBackground(vararg entry: Entry?): Void? {
-            entry[0]?.let { mDb.entryDao().insertEntry(it) }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            super.onPostExecute(result)
-            cancel(true)
-        }
-    }
-
-    private inner class UpdateTask: AsyncTask<Entry, Void, Void>() {
-        override fun doInBackground(vararg entry: Entry?): Void? {
-
-            entry[0]?.let { mDb.entryDao().updateEntry(it) }
-
-            return null
-        }
-    }
-
 }
