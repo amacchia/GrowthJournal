@@ -11,7 +11,7 @@ import com.example.android.personalgrowthjournal.Database.Entry
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EntryListAdapter(val fragment: EntriesListFragment) : RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
+class EntryListAdapter(val mFragment: EntriesListFragment) : RecyclerView.Adapter<EntryListAdapter.EntryViewHolder>() {
 
     private var entryDataset = emptyList<Entry>()
 
@@ -42,6 +42,8 @@ class EntryListAdapter(val fragment: EntriesListFragment) : RecyclerView.Adapter
         View.OnClickListener, View.OnLongClickListener {
 
         init {
+            textView.isClickable = true
+            textView.isLongClickable = true
             textView.setOnClickListener(this)
             textView.setOnLongClickListener(this)
         }
@@ -50,21 +52,21 @@ class EntryListAdapter(val fragment: EntriesListFragment) : RecyclerView.Adapter
             val selectedEntryId = entryDataset[adapterPosition].id
             Log.i("EntryViewHolder", "$selectedEntryId")
 
-            val fragment = EntryFragment()
+            val newFragment = EntryFragment()
             val args = Bundle()
             if (selectedEntryId != null) {
                 args.putInt("entryId", selectedEntryId)
             }
-            fragment.arguments = args
+            newFragment.arguments = args
 
-            val fragmentTransaction = fragment.fragmentManager?.beginTransaction()
-            fragmentTransaction?.replace(R.id.fragment_container, fragment)
+            val fragmentTransaction = mFragment.fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.fragment_container, newFragment)
             fragmentTransaction?.addToBackStack(null)
             fragmentTransaction?.commit()
         }
 
         override fun onLongClick(view: View?): Boolean {
-            fragment.deleteEntry(entryDataset[adapterPosition])
+            mFragment.deleteEntry(entryDataset[adapterPosition])
             return true
         }
 

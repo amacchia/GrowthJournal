@@ -9,4 +9,6 @@
     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
     android:textColor="@color/colorAccent"
     android:textStyle="bold"
-    tools:text="January 1, 2019"/>
+    tools:text="January 1, 2019"
+    android:clickable="true"
+    android:focusable="true"/>
