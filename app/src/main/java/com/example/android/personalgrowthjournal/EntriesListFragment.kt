@@ -22,17 +22,12 @@ class EntriesListFragment : Fragment() {
     val TAG = "EntriesListFragment"
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: EntryViewModel
 
     private lateinit var latestEntryDate: Date
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewManager = LinearLayoutManager(context)
-        (viewManager as LinearLayoutManager).reverseLayout = true
-        (viewManager as LinearLayoutManager).stackFromEnd = true
 
         viewAdapter = EntryListAdapter(this)
     }
@@ -84,6 +79,9 @@ class EntriesListFragment : Fragment() {
             }
         }
 
+        val viewManager = LinearLayoutManager(context)
+        viewManager.reverseLayout = true
+        viewManager.stackFromEnd = true
         recyclerView = view.findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
             layoutManager = viewManager
             adapter = viewAdapter
