@@ -13,7 +13,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.android.personalgrowthjournal.Database.Entry
+import java.util.*
 
 class EntriesListFragment : Fragment() {
 
@@ -22,6 +24,8 @@ class EntriesListFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: EntryViewModel
+
+    private lateinit var latestEntryDate: Date
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,9 @@ class EntriesListFragment : Fragment() {
         viewModel.getEntries().observe(this, Observer {
             if (it != null) {
                 (viewAdapter as EntryListAdapter).setData(it)
+
+                // Store the date of the latest entry
+                latestEntryDate = it[it.size - 1].entryDate
             }
         })
     }
@@ -52,11 +59,29 @@ class EntriesListFragment : Fragment() {
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
 
         fab.setOnClickListener {
-            val fragmentManager = fragmentManager
-            val fragmentTransaction = fragmentManager?.beginTransaction()
-            fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
-            fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
-            fragmentTransaction?.commit()
+            // Check if there's an entry for today
+            val cal = Calendar.getInstance()
+            val month = cal.get(Calendar.MONTH)
+            val dayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
+            val year = cal.get(Calendar.YEAR)
+
+            cal.time = latestEntryDate
+
+            val lastEntryMonth = cal.get(Calendar.MONTH)
+            val lastEntryDayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
+            val lastEntryYear = cal.get(Calendar.YEAR)
+
+
+            if (month == lastEntryMonth && dayOfMonth == lastEntryDayOfMonth &&
+                    year == lastEntryYear) { // There is already entry for today do not create a new one
+                Toast.makeText(context, getString(R.string.existing_entry_msg), Toast.LENGTH_SHORT).show()
+            } else {
+                val fragmentManager = fragmentManager
+                val fragmentTransaction = fragmentManager?.beginTransaction()
+                fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
+                fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
+                fragmentTransaction?.commit()
+            }
         }
 
         recyclerView = view.findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
