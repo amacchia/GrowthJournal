@@ -3,4 +3,5 @@
     <string name="delete_entry_message">Are you sure you want to delete this entry?</string>
     <string name="delete_entry_title">Delete Entry</string>
     <string name="existing_entry_msg">You already have an entry for today</string>
+    <string name="journal_entries">Journal Entries</string>
 </resources>

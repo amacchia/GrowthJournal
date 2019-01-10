@@ -50,6 +50,8 @@ class EntriesListFragment : Fragment() {
             : View? {
         Log.i(TAG, "onCreateView()")
 
+        activity?.title = getString(R.string.journal_entries)
+
         val view = inflater.inflate(R.layout.entries_list, container, false)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
 

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import com.example.android.personalgrowthjournal.Database.Entry
+import java.text.SimpleDateFormat
 import java.util.*
 
 class EntryFragment : Fragment() {
@@ -26,6 +27,8 @@ class EntryFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
+
+
         mViewModel = ViewModelProviders.of(this).get(EntryDetailViewModel::class.java)
 
         mNewEntry = arguments == null
@@ -42,6 +45,13 @@ class EntryFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        if (::mEntry.isInitialized) {
+            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(mEntry.entryDate)
+        } else {
+            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
+        }
+
         val view = inflater.inflate(R.layout.entry_fragment, container, false)
 
         mGratitudeEditText = view.findViewById(R.id.edit_text_gratitude_entry)
@@ -69,7 +79,6 @@ class EntryFragment : Fragment() {
 
 
     private fun finishFragment() {
-
         if (mNewEntry) {
             mEntry = Entry(
                 mGratitudeEditText.text.toString(),
