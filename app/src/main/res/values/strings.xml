@@ -4,4 +4,5 @@
     <string name="delete_entry_title">Delete Entry</string>
     <string name="existing_entry_msg">You already have an entry for today</string>
     <string name="journal_entries">Journal Entries</string>
+    <string name="write_here_hint">Write Here...</string>
 </resources>

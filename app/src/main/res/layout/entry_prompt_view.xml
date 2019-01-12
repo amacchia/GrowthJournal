@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="256dp"
+    android:layout_margin="8dp">
+
+    <RelativeLayout
+        android:id="@+id/card_view_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            tools:text="Here is the prompt?" />
+
+        <View
+            android:layout_alignBottom="@id/text_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/write_here_hint"
+            android:gravity="start"
+            android:minLines="8"
+            android:background="@android:color/transparent"
+            />
+
+    </RelativeLayout>
+
+</android.support.design.card.MaterialCardView>
