@@ -32,26 +32,24 @@ class EntryFragment : Fragment() {
         mViewModel = ViewModelProviders.of(this).get(EntryDetailViewModel::class.java)
 
         mNewEntry = arguments == null
-        if (!mNewEntry) {
-            // Load the entry from the database
-            val selectedEntryId = arguments?.getInt("entryId")
-            val entryLiveData = selectedEntryId?.let { mViewModel.getEntryById(it) }
 
-            entryLiveData?.observe(this, android.arch.lifecycle.Observer {
-                Log.i("EntryFragment", "${it!!}")
+        // Load the entry from the database
+        val selectedEntryId = arguments?.getInt("entryId")
+        val entryLiveData = selectedEntryId?.let { mViewModel.getEntryById(it) }
+
+        entryLiveData?.observe(this, android.arch.lifecycle.Observer {
+            Log.i("EntryFragment", "${it!!}")
+            if (mNewEntry) {
+                fillEntryPrompts(true)
+            } else {
                 mEntry = it
-            })
-        }
+                fillEntryPrompts(false)
+            }
+        })
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        if (::mEntry.isInitialized) {
-            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(mEntry.entryDate)
-        } else {
-            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
-        }
-
         val view = inflater.inflate(R.layout.entry_fragment, container, false)
 
         val gratCardView = view.findViewById<CardView>(R.id.gratitude_entry_card_view)
@@ -82,6 +80,21 @@ class EntryFragment : Fragment() {
         return view
     }
 
+    private fun fillEntryPrompts(isNewEntry: Boolean) {
+        if (!isNewEntry) {
+            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(mEntry.entryDate)
+            mGratitudeEditText.setText(mEntry.gratitudeEntry)
+            mSuccessfulEditText.setText(mEntry.successEntry)
+            mWellEditText.setText(mEntry.wellEntry)
+            mBetterEditText.setText(mEntry.betterEntry)
+            mVentEditText.setText(mEntry.ventEntry)
+        } else {
+            activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
+            mWellEditText.hint = getString(R.string.come_back_later_hint)
+            mBetterEditText.hint = getString(R.string.come_back_later_hint)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.entry_fragment_menu, menu)
     }
@@ -95,7 +108,6 @@ class EntryFragment : Fragment() {
 
         return true
     }
-
 
     private fun finishFragment() {
         if (mNewEntry) {

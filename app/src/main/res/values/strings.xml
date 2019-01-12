@@ -10,4 +10,5 @@
     <string name="well_prompt">What did you do well today?</string>
     <string name="better_prompt">What could you have done better?</string>
     <string name="vent_prompt">Anything, you need to get off your chest? Write it here.</string>
+    <string name="come_back_later_hint">Come back later today to complete this entry.</string>
 </resources>
