@@ -3,9 +3,11 @@ package com.example.android.personalgrowthjournal
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.util.Log
 import android.view.*
 import android.widget.EditText
+import android.widget.TextView
 import com.example.android.personalgrowthjournal.Database.Entry
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,8 +28,6 @@ class EntryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-
 
         mViewModel = ViewModelProviders.of(this).get(EntryDetailViewModel::class.java)
 
@@ -54,11 +54,30 @@ class EntryFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.entry_fragment, container, false)
 
-        mGratitudeEditText = view.findViewById(R.id.edit_text_gratitude_entry)
-        mSuccessfulEditText = view.findViewById(R.id.edit_text_successful_entry)
-        mWellEditText = view.findViewById(R.id.edit_text_well_entry)
-        mBetterEditText = view.findViewById(R.id.edit_text_better_entry)
-        mVentEditText = view.findViewById(R.id.edit_text_vent_entry)
+        val gratCardView = view.findViewById<CardView>(R.id.gratitude_entry_card_view)
+        val gratPrompt = gratCardView.findViewById<TextView>(R.id.text_prompt)
+        gratPrompt.text = getString(R.string.gratitude_prompt)
+        mGratitudeEditText = gratCardView.findViewById(R.id.edit_text_entry)
+
+        val succCardView = view.findViewById<CardView>(R.id.successful_entry_card_view)
+        val succPrompt = succCardView.findViewById<TextView>(R.id.text_prompt)
+        succPrompt.text = getString(R.string.successful_prompt)
+        mSuccessfulEditText = succCardView.findViewById(R.id.edit_text_entry)
+
+        val wellCardView = view.findViewById<CardView>(R.id.well_entry_card_view)
+        val wellPrompt = wellCardView.findViewById<TextView>(R.id.text_prompt)
+        wellPrompt.text = getString(R.string.well_prompt)
+        mWellEditText = wellCardView.findViewById(R.id.edit_text_entry)
+
+        val betterCardView = view.findViewById<CardView>(R.id.better_entry_card_view)
+        val betterPrompt = betterCardView.findViewById<TextView>(R.id.text_prompt)
+        betterPrompt.text = getString(R.string.better_prompt)
+        mBetterEditText = betterCardView.findViewById(R.id.edit_text_entry)
+
+        val ventCardView = view.findViewById<CardView>(R.id.vent_entry_card_view)
+        val ventPrompt = ventCardView.findViewById<TextView>(R.id.text_prompt)
+        ventPrompt.text = getString(R.string.vent_prompt)
+        mVentEditText = ventCardView.findViewById(R.id.edit_text_entry)
 
         return view
     }

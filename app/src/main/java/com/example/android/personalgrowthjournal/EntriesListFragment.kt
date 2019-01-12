@@ -41,11 +41,14 @@ class EntriesListFragment : Fragment() {
                 (viewAdapter as EntryListAdapter).setData(it)
 
                 // Store the date of the latest entry
-                latestEntryDate = it[it.size - 1].entryDate
+                if (it.isNotEmpty()) {
+                    latestEntryDate = it[it.size - 1].entryDate
+                }
+
             }
         })
     }
-    
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
             : View? {
         Log.i(TAG, "onCreateView()")
@@ -56,22 +59,25 @@ class EntriesListFragment : Fragment() {
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
 
         fab.setOnClickListener {
-            // Check if there's an entry for today
-            val cal = Calendar.getInstance()
-            val month = cal.get(Calendar.MONTH)
-            val dayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
-            val year = cal.get(Calendar.YEAR)
+            if (::latestEntryDate.isInitialized) {
+                // Check if there's an entry for today
+                val cal = Calendar.getInstance()
+                val month = cal.get(Calendar.MONTH)
+                val dayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
+                val year = cal.get(Calendar.YEAR)
 
-            cal.time = latestEntryDate
+                cal.time = latestEntryDate  // If there are no entries, this will cause an error
 
-            val lastEntryMonth = cal.get(Calendar.MONTH)
-            val lastEntryDayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
-            val lastEntryYear = cal.get(Calendar.YEAR)
+                val lastEntryMonth = cal.get(Calendar.MONTH)
+                val lastEntryDayOfMonth = cal.get(Calendar.DAY_OF_MONTH)
+                val lastEntryYear = cal.get(Calendar.YEAR)
 
 
-            if (month == lastEntryMonth && dayOfMonth == lastEntryDayOfMonth &&
-                    year == lastEntryYear) { // There is already entry for today do not create a new one
-                Toast.makeText(context, getString(R.string.existing_entry_msg), Toast.LENGTH_SHORT).show()
+                if (month == lastEntryMonth && dayOfMonth == lastEntryDayOfMonth &&
+                    year == lastEntryYear
+                ) { // There is already entry for today do not create a new one
+                    Toast.makeText(context, getString(R.string.existing_entry_msg), Toast.LENGTH_SHORT).show()
+                }
             } else {
                 val fragmentManager = fragmentManager
                 val fragmentTransaction = fragmentManager?.beginTransaction()

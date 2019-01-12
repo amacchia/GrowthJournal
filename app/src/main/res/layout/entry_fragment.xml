@@ -1,52 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edit_text_gratitude_entry"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Gratitude"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/edit_text_successful_entry"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Successful"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:padding="8dp"/>
+        <include
+            android:id="@+id/gratitude_entry_card_view"
+            layout="@layout/entry_prompt_view" />
 
-    <EditText
-        android:id="@+id/edit_text_well_entry"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Well"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:padding="8dp"/>
+        <include
+            android:id="@+id/successful_entry_card_view"
+            layout="@layout/entry_prompt_view" />
 
-    <EditText
-        android:id="@+id/edit_text_better_entry"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Better"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:padding="8dp"/>
+        <include
+            android:id="@+id/well_entry_card_view"
+            layout="@layout/entry_prompt_view" />
 
-    <EditText
-        android:id="@+id/edit_text_vent_entry"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Vent"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:padding="8dp"/>
+        <include
+            android:id="@+id/better_entry_card_view"
+            layout="@layout/entry_prompt_view" />
 
-</LinearLayout>
+        <include
+            android:id="@+id/vent_entry_card_view"
+            layout="@layout/entry_prompt_view" />
+
+    </LinearLayout>
+
+</ScrollView>

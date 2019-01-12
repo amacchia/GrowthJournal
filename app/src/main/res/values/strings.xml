@@ -5,4 +5,9 @@
     <string name="existing_entry_msg">You already have an entry for today</string>
     <string name="journal_entries">Journal Entries</string>
     <string name="write_here_hint">Write Here...</string>
+    <string name="gratitude_prompt">What are you grateful for today?</string>
+    <string name="successful_prompt">What would make today successful?</string>
+    <string name="well_prompt">What did you do well today?</string>
+    <string name="better_prompt">What could you have done better?</string>
+    <string name="vent_prompt">Anything, you need to get off your chest? Write it here.</string>
 </resources>
