@@ -41,8 +41,10 @@ class EntriesListFragment : Fragment() {
                 (viewAdapter as EntryListAdapter).setData(it)
 
                 // Store the date of the latest entry
-                if (it.isNotEmpty()) {
-                    latestEntryDate = it[it.size - 1].entryDate
+                latestEntryDate = if (it.isNotEmpty()) {
+                    it[it.size - 1].entryDate
+                } else {
+                    Date(0)
                 }
 
             }
@@ -77,13 +79,11 @@ class EntriesListFragment : Fragment() {
                     year == lastEntryYear
                 ) { // There is already entry for today do not create a new one
                     Toast.makeText(context, getString(R.string.existing_entry_msg), Toast.LENGTH_SHORT).show()
+                } else {
+                    launchDetailFragment()
                 }
             } else {
-                val fragmentManager = fragmentManager
-                val fragmentTransaction = fragmentManager?.beginTransaction()
-                fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
-                fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
-                fragmentTransaction?.commit()
+                launchDetailFragment()
             }
         }
 
@@ -99,6 +99,14 @@ class EntriesListFragment : Fragment() {
         recyclerView.addItemDecoration(divider)
 
         return view
+    }
+
+    private fun launchDetailFragment() {
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
+        fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
+        fragmentTransaction?.commit()
     }
 
     fun deleteEntry(entry: Entry) {
