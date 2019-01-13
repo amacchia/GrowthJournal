@@ -23,7 +23,7 @@ class EntryFragment : Fragment() {
 
     private lateinit var mEntry: Entry // Will be initialized if an Entry is being updated
 
-    var mNewEntry = false
+    private var mNewEntry = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,21 +32,6 @@ class EntryFragment : Fragment() {
         mViewModel = ViewModelProviders.of(this).get(EntryDetailViewModel::class.java)
 
         mNewEntry = arguments == null
-
-        // Load the entry from the database
-        val selectedEntryId = arguments?.getInt("entryId")
-        val entryLiveData = selectedEntryId?.let { mViewModel.getEntryById(it) }
-
-        entryLiveData?.observe(this, android.arch.lifecycle.Observer {
-            Log.i("EntryFragment", "${it!!}")
-            if (mNewEntry) {
-                fillEntryPrompts(true)
-            } else {
-                mEntry = it
-                fillEntryPrompts(false)
-            }
-        })
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,6 +62,20 @@ class EntryFragment : Fragment() {
         ventPrompt.text = getString(R.string.vent_prompt)
         mVentEditText = ventCardView.findViewById(R.id.edit_text_entry)
 
+        if (mNewEntry) {
+            fillEntryPrompts(true)
+        } else {
+            // Load the entry from the database
+            val selectedEntryId = arguments?.getInt("entryId")
+            val entryLiveData = selectedEntryId?.let { mViewModel.getEntryById(it) }
+
+            entryLiveData?.observe(this, android.arch.lifecycle.Observer {
+                Log.i("EntryFragment", "${it!!}")
+                mEntry = it
+                fillEntryPrompts(false)
+            })
+        }
+
         return view
     }
 
@@ -92,6 +91,8 @@ class EntryFragment : Fragment() {
             activity?.title = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
             mWellEditText.hint = getString(R.string.come_back_later_hint)
             mBetterEditText.hint = getString(R.string.come_back_later_hint)
+            mWellEditText.isEnabled = false
+            mBetterEditText.isEnabled = false
         }
     }
 
