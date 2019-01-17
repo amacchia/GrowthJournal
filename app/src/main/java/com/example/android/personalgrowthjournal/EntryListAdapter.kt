@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.android.personalgrowthjournal.Database.Entry
+import com.example.android.personalgrowthjournal.Fragments.EntriesListFragment
+import com.example.android.personalgrowthjournal.Fragments.EntryFragment
 import java.text.SimpleDateFormat
 import java.util.*
 

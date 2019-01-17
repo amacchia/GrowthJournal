@@ -1,4 +1,4 @@
-package com.example.android.personalgrowthjournal
+package com.example.android.personalgrowthjournal.ViewModels
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

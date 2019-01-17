@@ -1,4 +1,4 @@
-package com.example.android.personalgrowthjournal
+package com.example.android.personalgrowthjournal.Fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -15,6 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.android.personalgrowthjournal.Database.Entry
+import com.example.android.personalgrowthjournal.EntryListAdapter
+import com.example.android.personalgrowthjournal.ViewModels.EntryViewModel
+import com.example.android.personalgrowthjournal.R
 import java.util.*
 
 class EntriesListFragment : Fragment() {
@@ -104,7 +107,10 @@ class EntriesListFragment : Fragment() {
     private fun launchDetailFragment() {
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
-        fragmentTransaction?.replace(R.id.fragment_container, EntryFragment())
+        fragmentTransaction?.replace(
+            R.id.fragment_container,
+            EntryFragment()
+        )
         fragmentTransaction?.addToBackStack(null) // Add to backstack to return with back button
         fragmentTransaction?.commit()
     }

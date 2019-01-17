@@ -1,4 +1,4 @@
-package com.example.android.personalgrowthjournal
+package com.example.android.personalgrowthjournal.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.*
 import android.widget.EditText
 import android.widget.TextView
 import com.example.android.personalgrowthjournal.Database.Entry
+import com.example.android.personalgrowthjournal.ViewModels.EntryDetailViewModel
+import com.example.android.personalgrowthjournal.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -134,7 +136,10 @@ class EntryFragment : Fragment() {
         // Use this instead of pop backstack because it will return to previous state without updated data
         // At least I think that's how it works
         fragmentManager?.beginTransaction()
-            ?.replace(R.id.fragment_container, EntriesListFragment())
+            ?.replace(
+                R.id.fragment_container,
+                EntriesListFragment()
+            )
             ?.commit()
     }
 
