@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/save_entry_menu_item"
-        android:title="save"
-        app:showAsAction="always|withText" />
+        android:title="@string/save_menu_item"
+        app:showAsAction="ifRoom|withText"
+        />
 
 </menu>
