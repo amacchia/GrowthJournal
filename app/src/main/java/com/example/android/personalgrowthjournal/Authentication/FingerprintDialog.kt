@@ -22,15 +22,17 @@ import javax.crypto.SecretKey
 
 // Much taken from: https://github.com/androidessence/FingerprintDialogSample
 
-
 /**
  * DialogFragment that prompts the user to authenticate their fingerprint.
  */
 class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
 
     private val controller: FingerprintController by lazy {
-        FingerprintController(FingerprintManagerCompat.from(requireContext()))
+        FingerprintController(FingerprintManagerCompat.from(requireContext()),
+            this)
     }
+
+    private lateinit var callback: FingerprintDialog.Callback
 
     /**
      * CryptoObject is a wrapper class for any cryptography required by the FingerprintManager.
@@ -52,11 +54,6 @@ class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.dialog_fingerprint, container, false)
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,11 +107,16 @@ class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
     }
 
     override fun onAuthenticated() {
-        //TODO:
+        callback.onAuthSuccess()
+        dismiss()
     }
 
-    override fun onError() {
-        //TODO:
+    override fun onError(err: String) {
+        callback.onAuthError()
+    }
+
+    fun setCallback(callback: Callback) {
+        this.callback = callback
     }
 
     /**
@@ -205,6 +207,11 @@ class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
             throw RuntimeException(e)
         }
 
+    }
+
+    interface Callback {
+        fun onAuthSuccess()
+        fun onAuthError()
     }
 
     companion object {
