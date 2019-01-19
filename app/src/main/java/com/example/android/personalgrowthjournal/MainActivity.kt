@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity(), FingerprintDialog.Callback {
         showToast("Auth Error")
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

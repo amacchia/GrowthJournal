@@ -59,6 +59,8 @@ class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.isCancelable = false
+
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore")
         } catch (e: KeyStoreException) {
@@ -90,6 +92,7 @@ class FingerprintDialog : DialogFragment(), FingerprintController.Callback {
         if (initCipher(defaultCipher, DEFAULT_KEY_NAME)) {
             cryptoObject = FingerprintManagerCompat.CryptoObject(defaultCipher)
         }
+
     }
 
     override fun onResume() {
